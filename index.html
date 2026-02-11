@@ -304,8 +304,8 @@
         /* Floating character images */
         .floating-character {
             position: fixed;
-            width: 110px;
-            height: 110px;
+            width: 180px;
+            height: 180px;
             object-fit: contain;
             z-index: 5;
             pointer-events: none;
@@ -542,8 +542,8 @@
     // Start them at opposite corners so they don't overlap
     characters[0].el.style.left = '30px';
     characters[0].el.style.top  = '30px';
-    characters[1].el.style.left = (window.innerWidth - 140) + 'px';
-    characters[1].el.style.top  = (window.innerHeight - 140) + 'px';
+    characters[1].el.style.left = (window.innerWidth - 210) + 'px';
+    characters[1].el.style.top  = (window.innerHeight - 210) + 'px';
 
     function animateCharacters() {
         characters.forEach(c => {
