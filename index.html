@@ -3,119 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Surprise ❤️</title>
+    <title>For My Valentine ❤️</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #ffeef2;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
             overflow: hidden;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             text-align: center;
+            width: 350px;
+            transition: all 0.5s ease;
         }
-        .container {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            max-width: 400px;
-            width: 90%;
-            position: relative;
-        }
-        h2 { color: #d63384; }
+        h2 { color: #d63384; margin-bottom: 20px; }
         input {
-            padding: 10px;
-            border: 2px solid #ffb3c1;
-            border-radius: 10px;
-            margin-bottom: 10px;
             width: 80%;
-        }
-        button {
-            background-color: #ff4d6d;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
+            padding: 12px;
+            border: 2px solid #ffb3c1;
+            border-radius: 25px;
+            outline: none;
+            text-align: center;
             font-size: 16px;
         }
-        #no-btn {
-            position: absolute;
-            background-color: #888;
+        button {
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+            transition: 0.3s;
         }
+        button:hover { background: #ff758f; transform: scale(1.05); }
+        #no-btn { position: fixed; background: #6c757d; z-index: 999; }
         .hidden { display: none; }
-        .heart { color: #ff4d6d; font-size: 50px; }
+        video { width: 100%; border-radius: 15px; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-<div class="container" id="game-container">
+<div class="card" id="main-card">
     <div id="puzzle-section">
-        <div class="heart">❤️</div>
-        <h2 id="question-text">Puzzle 1: What is 5 + 5?</h2>
-        <input type="text" id="answer-input" placeholder="Type answer here...">
+        <h2 id="q-title">Puzzle 1</h2>
+        <p id="q-text">What is the date of Valentine's Day? (Format: 14 Feb)</p>
+        <input type="text" id="ans-input" placeholder="Your answer...">
         <br>
-        <button onclick="checkAnswer()">Next</button>
-        <p id="feedback" style="color: red;"></p>
+        <button onclick="nextPuzzle()">Next ✨</button>
     </div>
 
-    <div id="final-section" class="hidden">
-        <div class="heart">💖</div>
-        <h2>Will you be my Valentine?</h2>
-        <div style="margin-top: 50px;">
-            <button id="yes-btn" onclick="celebrate()">Yes!</button>
-            <button id="no-btn" onmouseover="moveButton()">No</button>
+    <div id="valentine-section" class="hidden">
+        <h2>Will you be my Valentine? 🌹</h2>
+        <div style="height: 120px; display: flex; justify-content: center; align-items: center; gap: 20px;">
+            <button id="yes-btn" onclick="showSuccess()">Yes!</button>
+            <button id="no-btn" onmouseover="runAway()">No</button>
         </div>
+    </div>
+
+    <div id="success-section" class="hidden">
+        <h2>Yay! I knew it! ❤️</h2>
+        <p>Toothless and Donkey have a gift for you...</p>
+        <video id="val-video" controls>
+            <source src="toothless.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
     </div>
 </div>
 
 <script>
     const puzzles = [
-        { q: "What is 10 + 10?", a: "20" },
-        { q: "What color is a strawberry?", a: "red" },
-        { q: "What is the opposite of 'Hate'?", a: "love" },
-        { q: "Who is the cutest person in the world? (Hint: It's You)", a: "you" }
+        { q: "What is the date of Valentine's Day? (Format: 14 Feb)", a: "14 feb" },
+        { q: "In Shrek, what is Donkey's favorite food? (Hint: Waffles)", a: "waffles" },
+        { q: "What color represents love?", a: "red" },
+        { q: "Type 'I LOVE YOU' to finish!", a: "i love you" }
     ];
 
-    let currentStep = 0;
+    let current = 0;
 
-    function checkAnswer() {
-        const userInput = document.getElementById('answer-input').value.toLowerCase().trim();
-        const feedback = document.getElementById('feedback');
-
-        if (userInput === puzzles[currentStep].a) {
-            currentStep++;
-            feedback.textContent = "";
-            document.getElementById('answer-input').value = "";
-            
-            if (currentStep < puzzles.length) {
-                document.getElementById('question-text').textContent = `Puzzle ${currentStep + 1}: ${puzzles[currentStep].q}`;
+    function nextPuzzle() {
+        let input = document.getElementById('ans-input').value.toLowerCase().trim();
+        if (input === puzzles[current].a) {
+            current++;
+            if (current < puzzles.length) {
+                document.getElementById('q-title').innerText = `Puzzle ${current + 1}`;
+                document.getElementById('q-text').innerText = puzzles[current].q;
+                document.getElementById('ans-input').value = "";
             } else {
                 document.getElementById('puzzle-section').classList.add('hidden');
-                document.getElementById('final-section').classList.remove('hidden');
+                document.getElementById('valentine-section').classList.remove('hidden');
             }
         } else {
-            feedback.textContent = "Wrong! Try again ❤️";
+            alert("Oops! Try again ❤️");
         }
     }
 
-    function moveButton() {
+    function runAway() {
         const btn = document.getElementById('no-btn');
-        // Calculate random positions within the screen
-        const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-        const y = Math.random() * (window.innerHeight - btn.offsetHeight);
-        
+        const x = Math.random() * (window.innerWidth - 100);
+        const y = Math.random() * (window.innerHeight - 50);
         btn.style.left = x + 'px';
         btn.style.top = y + 'px';
     }
 
-    function celebrate() {
-        alert("Yay! Best Valentine ever! 🌹✨");
-        // You can redirect to your video link here!
-        window.location.href = "YOUR_VIDEO_URL_HERE"; 
+    function showSuccess() {
+        document.getElementById('valentine-section').classList.add('hidden');
+        document.getElementById('success-section').classList.remove('hidden');
+        document.getElementById('val-video').play();
     }
 </script>
 
