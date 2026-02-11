@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Surprise ❤️</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffeef2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            text-align: center;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+        h2 { color: #d63384; }
+        input {
+            padding: 10px;
+            border: 2px solid #ffb3c1;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            width: 80%;
+        }
+        button {
+            background-color: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #no-btn {
+            position: absolute;
+            background-color: #888;
+        }
+        .hidden { display: none; }
+        .heart { color: #ff4d6d; font-size: 50px; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="game-container">
+    <div id="puzzle-section">
+        <div class="heart">❤️</div>
+        <h2 id="question-text">Puzzle 1: What is 5 + 5?</h2>
+        <input type="text" id="answer-input" placeholder="Type answer here...">
+        <br>
+        <button onclick="checkAnswer()">Next</button>
+        <p id="feedback" style="color: red;"></p>
+    </div>
+
+    <div id="final-section" class="hidden">
+        <div class="heart">💖</div>
+        <h2>Will you be my Valentine?</h2>
+        <div style="margin-top: 50px;">
+            <button id="yes-btn" onclick="celebrate()">Yes!</button>
+            <button id="no-btn" onmouseover="moveButton()">No</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const puzzles = [
+        { q: "What is 10 + 10?", a: "20" },
+        { q: "What color is a strawberry?", a: "red" },
+        { q: "What is the opposite of 'Hate'?", a: "love" },
+        { q: "Who is the cutest person in the world? (Hint: It's You)", a: "you" }
+    ];
+
+    let currentStep = 0;
+
+    function checkAnswer() {
+        const userInput = document.getElementById('answer-input').value.toLowerCase().trim();
+        const feedback = document.getElementById('feedback');
+
+        if (userInput === puzzles[currentStep].a) {
+            currentStep++;
+            feedback.textContent = "";
+            document.getElementById('answer-input').value = "";
+            
+            if (currentStep < puzzles.length) {
+                document.getElementById('question-text').textContent = `Puzzle ${currentStep + 1}: ${puzzles[currentStep].q}`;
+            } else {
+                document.getElementById('puzzle-section').classList.add('hidden');
+                document.getElementById('final-section').classList.remove('hidden');
+            }
+        } else {
+            feedback.textContent = "Wrong! Try again ❤️";
+        }
+    }
+
+    function moveButton() {
+        const btn = document.getElementById('no-btn');
+        // Calculate random positions within the screen
+        const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+        const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+        
+        btn.style.left = x + 'px';
+        btn.style.top = y + 'px';
+    }
+
+    function celebrate() {
+        alert("Yay! Best Valentine ever! 🌹✨");
+        // You can redirect to your video link here!
+        window.location.href = "YOUR_VIDEO_URL_HERE"; 
+    }
+</script>
+
+</body>
+</html>
